@@ -1,26 +1,97 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
+{% extends 'base/index2.html' %}
+{% load static %}
+
+{% block head %}
+  <link rel="stylesheet" href="{% static 'lb/datatables-1.10.20/css/dataTables.bootstrap4.min.css' %}"/>
+<link rel="stylesheet" href="{% static 'lb/datatables-1.10.20/plugins/responsive-2.2.3/css/responsive.bootstrap4.min.css' %}"/>
+<script src="{% static 'lb/datatables-1.10.20/js/jquery.dataTables.js' %}"></script>
+<script src="{% static 'lb/datatables-1.10.20/js/dataTables.bootstrap4.min.js' %}"></script>
+<script src="{% static 'lb/datatables-1.10.20/plugins/responsive-2.2.3/js/dataTables.responsive.min.js' %}"></script>
+<script src="{% static 'lb/datatables-1.10.20/plugins/responsive-2.2.3/js/responsive.bootstrap4.min.js' %}"></script>
+
+
+
+{% endblock %}
+
+
+
+
+
+
+{% block content %}
+
+<br>
+<div class="container">
+
+
+<div class="card">
+  <div class="card-header ui-sortable-handle" style="cursor: move;">
+  <h3 class="card-title">
+  <i class="ion ion-clipboard mr-1"></i>
+  <i class="fas fa-search"></i> Lstado de Categoria
+  </h3>
+ 
+  </div>
+  
+  <div class="card-body">
+  <ul class="todo-list ui-sortable" data-widget="todo-list">
+  <li>
+  
+    <table class="table" id="data" >
+      <thead class="thead-dark">
+        <tr>
+          <th>Nro</th>
+          <th>hora</th>
+          <th>monto</th>
+          <th>accion</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for dato in object_list %}
+
+          <tr>
+            <td> {{dato.id}} </td>
+            <td>{{dato.hora_jugada}}</td>
+            <td>{{dato.monto_jugada}}</td>
+            <td>
+              
+              <a type="button"  class="btn btn-info"href="{% url 'LoteriaUrl:editar_jugadasUrl' dato.id %}"><i class="fas fa-edit"></i></a>
+              <a type="button"  class="btn btn-danger"href="{% url 'LoteriaUrl:eliminar_jugadasUrl' dato.id %}"><i class="fas fa-trash-alt"></i></a>
+        
+            </td>
+          </tr>
+
+        {% endfor %}
+      </tbody>
+    </table>
+  </li>
+  
+ 
+  
+  </ul>
+  <div class="card-footer clearfix">
+
+    <a href="{% url 'LoteriaUrl:crear_jugadasUrl' %}" class="btn btn-primary float-right"><i class="fas fa-plus"></i>Add Categoria</a>
+    </div>
+  </div>
+  
+  
+  </div>
+</div>
     
+    {% endblock %}
 
 
 
-    {% for dato in object_list %}
+{% block javascript %}
+<script type="text/javascript">
 
-    {{dato.hora_jugada}}
-    {{dato.monto_jugada}}
+  $('#data').DataTable({
+    responsive: true,
+    autoWidth: false
+});
+
+</script>
 
 
-
-    {% endfor %}
-
-
-
-</body>
-</html>
+{% endblock %}

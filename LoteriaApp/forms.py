@@ -15,12 +15,12 @@ class form_loteria(ModelForm):
 
         widgets =  {
             'hora_jugada': forms.TimeInput(
-                attrs={'type': 'time'}
+                attrs={ "class":"fform-inline", 'type': 'time'}
             ),
 
             'monto_jugada':  forms.NumberInput(
                 attrs = {
-                    "class":"form-control",
+                    "class":"fform-inline",
                     "placeholder":"ingresa el monto de la jugada",
                    
                     
@@ -31,10 +31,9 @@ class form_loteria(ModelForm):
 
 
 
-            'relacion_animalito':  forms.CheckboxSelectMultiple()
+            'relacion_animalito':  forms.CheckboxSelectMultiple(attrs={"class":"form-inline row form-check-input", 'style':'margin-left: 25px;'})
         }
 
 
 
 
-        

@@ -20,3 +20,8 @@ class Loteria(models.Model):
     monto_jugada = models.DecimalField(default=0.00 , max_digits=12 , decimal_places=3 , null=False, blank= False )
     codigo_jugada = models.CharField(max_length=250 , null=False, blank= False )
     relacion_animalito = models.ManyToManyField(Animalito)
+
+
+
+
+
