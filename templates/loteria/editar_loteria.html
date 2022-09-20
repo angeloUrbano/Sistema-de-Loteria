@@ -16,7 +16,7 @@
   <div class="card-header ui-sortable-handle" style="cursor: move;">
   <h3 class="card-title">
   <i class="ion ion-clipboard mr-1"></i>
-  <i class="fas fa-plus"></i>  Crear Loteria 
+  <i class="fas fa-edit"> </i> Editar venta
   </h3>
  
   </div>
@@ -96,7 +96,7 @@
   <div class="card-header ui-sortable-handle" style="cursor: move;">
   <h3 class="card-title">
   <i class="ion ion-clipboard mr-1"></i>
-  <i class="fas fa-plus"></i>   Seleccionar animalito
+  <i class="fas fa-edit"> </i>  Editar animalito
   </h3>
  
   </div>
@@ -122,7 +122,9 @@
   
   </ul>
   <div class="card-footer clearfix">
-    <button type="submit" class="btn btn-primary float-right"><i class="fas fa-plus"></i> Add Categoria</button>
+    <button type="submit" class="btn btn-primary float-right"><i class="fas fa-edit"> </i> Editar Venta</button>
+    <a style="margin-right: 10px;" class="btn btn-danger float-right"  href="{% url 'LoteriaUrl:listar_jugadasUrl' %}">Cancelar</a>
+     
     </div>
   </div>
 </form>
@@ -133,92 +135,4 @@
   
   </div>
 </div>
-
-
-
-
-
-<script>
-
-
-  
-
-function mensaje_error(data) {
-  var html ='<ul>';
-    $.each(data , function(key, value) {
-
-      html += '<li>' +key+' : ' + value + '</li>';
-
-    
-    //  console.log(key);
-    //  console.log(value);
-
-
-    })
-    html += '</ul>';
-     Swal.fire({
-               title: 'Error!',
-               html:html,
-               icon: 'error',
-          
-             })
-  
-}
-
-
-
-function positivo_creacion() {
-
-      Swal.fire({
-      position: 'center',
-      icon: 'success',
-      title: 'Se ha registrado correctamente su venta',
-      showConfirmButton: false,
-      timer: 2500
-    })
-  
-}
-
-
-            $('form').on('submit' , function(e){
-              e.preventDefault();
-              var  parametros = $(this).serializeArray();
-             
-         
-             $.ajax({
-                    url :'{% url 'LoteriaUrl:crear_jugadasUrl' %}',
-                    type:'POST',
-                    data: parametros,
-                    dataType:'json'
-                  }).done(function(data) {
-                    if(!data.hasOwnProperty('error')){
-
-                     
-                        positivo_creacion();
-                   
-                      setTimeout( function() { window.location.href = "http://127.0.0.1:8000/prueba/jugadas/"; }, 2800 );
-                
-                    }else{
-
-                      mensaje_error(data.error);
-
-                    }
-                    
-                   
-                  })
-                  .fail(function(data) {
-                    alert('fail');
-                   
-                    
-                  });
-                  
-
-              });
-
-
-
-
-  
-</script>
-
 {% endblock %}

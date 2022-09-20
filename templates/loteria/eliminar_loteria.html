@@ -1,0 +1,132 @@
+{% extends 'base/index2.html' %}
+
+
+
+{% block content %}
+<br>
+
+<div class="container">
+
+
+    <div class="card">
+      <div class="card-header ui-sortable-handle" style="cursor: move;">
+      <h3 class="card-title">
+      <i class="ion ion-clipboard mr-1"></i>
+      <i class="fas fa-search"></i> Lstado de Categoria
+      </h3>
+     
+      </div>
+      
+      <div class="card-body">
+      <ul class="todo-list ui-sortable" data-widget="todo-list">
+      <li>
+      
+        <form method="post"> 
+            {% csrf_token %}
+
+            <div class="alert alert-danger" role="alert">
+                <strong>Eliminar!!!</strong> ¿Desea eliminar el siguiente elemento ?
+              
+              
+                <ul>
+            
+
+                 
+                  <li> <strong>{{object}}</strong></li>
+              
+
+               
+              </ul>
+            </div>
+    
+    
+            
+            
+           
+          
+      </li>
+      
+     
+      
+      </ul>
+      <div class="card-footer clearfix">
+        <button type="submit" class="btn btn-danger float-right"><i class="fas fa-trash-alt"></i></i>Eliminar</button>
+        
+         
+        <a style="margin-right: 10px;" class="btn btn-danger float-right"  href="{% url 'LoteriaUrl:listar_jugadasUrl' %}">Cancelar</a>
+        </div>
+
+
+        
+      </div>
+    </form>
+    
+      
+      </div>
+    </div>
+
+
+
+
+    <script>
+
+        function mensaje_error(data) {
+          var html ='<ul>';
+            $.each(data , function(key, value) {
+        
+              html += '<li>' +key+' : ' + value + '</li>';
+        
+            
+            //  console.log(key);
+            //  console.log(value);
+        
+        
+            })
+            html += '</ul>';
+             Swal.fire({
+                       title: 'Error!',
+                       html:html,
+                       icon: 'error',
+                  
+                     })
+          
+        }
+        
+        
+                    $('form').on('submit' , function(e){
+                      e.preventDefault();
+                      var  parametros = $(this).serializeArray();
+                     
+                 
+                     $.ajax({
+                            url :window.location.pathname,
+                            type:'POST',
+                            data: parametros ,
+                            dataType:'json'
+                          }).done(function(data) {
+                            if(!data.hasOwnProperty('error')){
+                              alert('ok')
+                            return false;
+                            }else{
+        
+                              mensaje_error(data.error);
+        
+                            }
+                            
+                           
+                          })
+                          .fail(function(data) {
+                            alert('fail');
+                           
+                            
+                          });
+                          
+        
+                      });
+        
+        
+        
+        
+          
+        </script>
+{% endblock %}

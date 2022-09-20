@@ -1,9 +1,11 @@
 from django.shortcuts import render , redirect
 from django.http import HttpResponse , JsonResponse
-from django.views.generic import ListView , CreateView , UpdateView , DeleteView
+from django.views.generic import ListView , CreateView , UpdateView , DeleteView , DetailView
 from django.urls import reverse_lazy
 from django.core import serializers
 import random
+from django.utils import timezone
+from decimal import Decimal
 
 
 
@@ -84,6 +86,7 @@ class creacion_loteria(CreateView):
                 data2 = form.cleaned_data
                 data_guardar.hora_jugada = data2['hora_jugada']
                 data_guardar.monto_jugada = data2['monto_jugada']
+                data_guardar.tipo_loteria_relacion = data2['tipo_loteria_relacion']
                 data_guardar.codigo_jugada = self.get_queryset()
                 data_guardar.save()
                 valor =[]
@@ -117,11 +120,48 @@ class editar_loteria(UpdateView):
 def probando(request):
 
     data={'informacion': 'campos que mando como informacion'}
-    return render(request, 'base/index2.html' ,  {'data':data})
+    return render(request, 'loteria/modal_detalle_venta.html' ,  {'data':data})
 
 
-
+class detalle_venta(DetailView):
+    model = Loteria
+    template_name= 'loteria/modal_detalle_venta.html'
+    pk_url_kwargs= 'pk'	
+    
 
 class listar_jugadas(ListView):
     model =  Loteria
     template_name= 'loteria/listar_loteria.html'
+
+
+    def generar_ganancias_bolivares(self):
+
+        now = timezone.now()
+        fecha_busqueda = self.model.objects.filter(creado=now)
+        suma =0
+        for x in fecha_busqueda:
+            suma += x.monto_jugada
+        return suma
+
+    def generar_ganancias_dolares(self):
+
+        now = timezone.now()
+        fecha_busqueda = self.model.objects.filter(creado=now)
+        suma =0
+        for x in fecha_busqueda:
+            suma += x.monto_jugada
+        resultado_dolares =Decimal(suma) // Decimal(8.22) 
+        dato_redondiado = round(resultado_dolares, 3)
+        
+        
+        return resultado_dolares  
+
+    def get_context_data(self, **kwargs):
+
+        context = super().get_context_data (**kwargs)
+        #ganancias del dia en bolivares
+        context['ganancias__bolivares']= self.generar_ganancias_bolivares()
+        #ganancias del dia en dolares
+        context['ganancias__dolares']= self. generar_ganancias_dolares
+        return context
+

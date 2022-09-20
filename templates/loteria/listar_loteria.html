@@ -2,12 +2,9 @@
 {% load static %}
 
 {% block head %}
-  <link rel="stylesheet" href="{% static 'lb/datatables-1.10.20/css/dataTables.bootstrap4.min.css' %}"/>
-<link rel="stylesheet" href="{% static 'lb/datatables-1.10.20/plugins/responsive-2.2.3/css/responsive.bootstrap4.min.css' %}"/>
-<script src="{% static 'lb/datatables-1.10.20/js/jquery.dataTables.js' %}"></script>
-<script src="{% static 'lb/datatables-1.10.20/js/dataTables.bootstrap4.min.js' %}"></script>
-<script src="{% static 'lb/datatables-1.10.20/plugins/responsive-2.2.3/js/dataTables.responsive.min.js' %}"></script>
-<script src="{% static 'lb/datatables-1.10.20/plugins/responsive-2.2.3/js/responsive.bootstrap4.min.js' %}"></script>
+<link rel="stylesheet" href="{% static '/lb/bootstrap-5.2.0-dist/css/bootstrap.min.css' %}">
+<link rel="stylesheet" href="{% static '/lb/datatables/datatables.min.css' %}">
+<link rel="stylesheet" href="{% static '/lb/datatables/DataTables-1.12.1/css/dataTables.bootstrap5.min.css' %}">
 
 
 
@@ -22,13 +19,75 @@
 
 <br>
 <div class="container">
+<div class="row">
+  <div class="col-lg-3 col-6">
+  
+  <div class="small-box bg-info">
+  <div class="inner">
+  <h3>{{ganancias__dolares}} $</h3>
+  <p>Ganacias del dia en dolares$</p>
+  </div>
+  <div class="icon">
+  <i class="ion ion-bag"></i>
+  </div>
+  <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+  </div>
+  </div>
+  
+  <div class="col-lg-3 col-6">
+  
+  <div class="small-box bg-success">
+  <div class="inner">
+  <h3>{{ganancias__bolivares}}<sup style="font-size: 20px"></sup></h3>
+  <p>Ganancias del dia en Bs$</p>
+  </div>
+  <div class="icon">
+  <i class="ion ion-stats-bars"></i>
+  </div>
+  <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+  </div>
+  </div>
+  
+  <div class="col-lg-3 col-6">
+  
+  <div class="small-box bg-warning">
+  <div class="inner">
+  <h3><i class="fas fa-user"></i></h3>
+  <p>Actividad del usuario</p>
+  </div>
+  <div class="icon">
+  <i class="ion ion-person-add"></i>
+  </div>
+  <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+  </div>
+  </div>
+  
+  <div class="col-lg-3 col-6">
+  
+  <div class="small-box bg-danger">
+  <div class="inner">
+  <h3>65</h3>
+  <p>Unique Visitors</p>
+  </div>
+  <div class="icon">
+  <i class="ion ion-pie-graph"></i>
+  </div>
+  <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+  </div>
+  </div>
+  
+  </div>
+
+</div>
+<br>
+<div class="container">
 
 
 <div class="card">
   <div class="card-header ui-sortable-handle" style="cursor: move;">
   <h3 class="card-title">
   <i class="ion ion-clipboard mr-1"></i>
-  <i class="fas fa-search"></i> Lstado de Categoria
+  <i class="fas fa-search"></i> Listado de loterias
   </h3>
  
   </div>
@@ -37,12 +96,13 @@
   <ul class="todo-list ui-sortable" data-widget="todo-list">
   <li>
   
-    <table class="table" id="data" >
+    <table class="table" id="example" >
       <thead class="thead-dark">
         <tr>
           <th>Nro</th>
           <th>hora</th>
           <th>monto</th>
+          <th>fecha</th>
           <th>accion</th>
         </tr>
       </thead>
@@ -53,11 +113,12 @@
             <td> {{dato.id}} </td>
             <td>{{dato.hora_jugada}}</td>
             <td>{{dato.monto_jugada}}</td>
+            <td>{{dato.creado}}</td>
             <td>
               
               <a type="button"  class="btn btn-info"href="{% url 'LoteriaUrl:editar_jugadasUrl' dato.id %}"><i class="fas fa-edit"></i></a>
               <a type="button"  class="btn btn-danger"href="{% url 'LoteriaUrl:eliminar_jugadasUrl' dato.id %}"><i class="fas fa-trash-alt"></i></a>
-        
+              <button class="btn btn-success" onclick="detalle_venta('{% url 'LoteriaUrl:detalle_jugadasUrl' dato.id  %}')">detalle</button>
             </td>
           </tr>
 
@@ -71,27 +132,45 @@
   </ul>
   <div class="card-footer clearfix">
 
-    <a href="{% url 'LoteriaUrl:crear_jugadasUrl' %}" class="btn btn-primary float-right"><i class="fas fa-plus"></i>Add Categoria</a>
+    <a href="{% url 'LoteriaUrl:crear_jugadasUrl' %}" class="btn btn-primary float-right"><i class="fas fa-plus"></i>Crear venta</a>
     </div>
   </div>
   
   
   </div>
 </div>
+
+<div class="modal fade" id="detalle_venta_modal" role="dialog"></div>
+
+<script src="{% static '/lb/jquery-3.6.1.min.js' %}"></script>
+<script src="{% static '/lb/bootstrap-5.2.0-dist/js/bootstrap.js' %}"></script>
+
+<script src="{% static '/lb/datatables/datatables.min.js' %}"></script> 
+
+
+<script>
+  $(document).ready(function () {
+    $('#example').DataTable();
+});
+</script> 
+
+
+<script type="text/javascript">
+
+
+  function detalle_venta (url){
+    
+    $('#detalle_venta_modal').load(url , function(){
+  
+        $(this).modal("show");
+  
+    })
+  
+  }
+  </script>
     
     {% endblock %}
 
+    
+ 
 
-
-{% block javascript %}
-<script type="text/javascript">
-
-  $('#data').DataTable({
-    responsive: true,
-    autoWidth: false
-});
-
-</script>
-
-
-{% endblock %}
