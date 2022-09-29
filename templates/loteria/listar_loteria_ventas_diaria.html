@@ -30,8 +30,7 @@
   <div class="icon">
   <i class="ion ion-bag"></i>
   </div>
-  
-  <a href="#" onclick="detalle_venta('{% url 'LoteriaUrl:divisaUrl' %}')" class="small-box-footer">Actualizar tasa  <i class="fas fa-arrow-circle-right"></i></a>
+  <a href="#" class="small-box-footer"><i class="fas fa-arrow-circle-right"></i></a>
   </div>
   </div>
   
@@ -53,14 +52,13 @@
   
   <div class="small-box bg-warning">
   <div class="inner">
-  <h3><i class="fas fa-file" aria-hidden="true"></i></h3>
-  <p>Reportes</p>
+  <h3><i class="fas fa-user"></i></h3>
+  <p>Actividad del usuario</p>
   </div>
   <div class="icon">
   <i class="ion ion-person-add"></i>
   </div>
-
-  <a href="{% url 'LoteriaUrl:reporteUrl' %}" class="small-box-footer">Mas info <i class="fas fa-arrow-circle-right"></i></a>
+  <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
   </div>
   </div>
   
@@ -89,7 +87,7 @@
   <div class="card-header ui-sortable-handle" style="cursor: move;">
   <h3 class="card-title">
   <i class="ion ion-clipboard mr-1"></i>
-  <i class="fas fa-search"></i> Listado de loterias
+  <i class="fas fa-search"></i> Listado de loterias diaria
   </h3>
  
   </div>
@@ -143,7 +141,6 @@
 </div>
 
 <div class="modal fade" id="detalle_venta_modal" role="dialog"></div>
-<div class="modal fade" id="divisa_modal" role="dialog"></div>
 
 <script src="{% static '/lb/jquery-3.6.1.min.js' %}"></script>
 <script src="{% static '/lb/bootstrap-5.2.0-dist/js/bootstrap.js' %}"></script>
@@ -164,23 +161,6 @@
   function detalle_venta (url){
     
     $('#detalle_venta_modal').load(url , function(){
-  
-        $(this).modal("show");
-  
-    })
-  
-  }
-  </script>
-
-
-
-
-<script type="text/javascript">
-
-
-  function divisa_modal_function (url){
-    
-    $('#divisa_modal').load(url , function(){
   
         $(this).modal("show");
   

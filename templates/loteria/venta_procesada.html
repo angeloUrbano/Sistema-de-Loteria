@@ -19,68 +19,7 @@
 
 <br>
 <div class="container">
-<div class="row">
-  <div class="col-lg-3 col-6">
-  
-  <div class="small-box bg-info">
-  <div class="inner">
-  <h3>{{ganancias__dolares}} $</h3>
-  <p>Ganacias del dia en dolares$</p>
-  </div>
-  <div class="icon">
-  <i class="ion ion-bag"></i>
-  </div>
-  
-  <a href="#" onclick="detalle_venta('{% url 'LoteriaUrl:divisaUrl' %}')" class="small-box-footer">Actualizar tasa  <i class="fas fa-arrow-circle-right"></i></a>
-  </div>
-  </div>
-  
-  <div class="col-lg-3 col-6">
-  
-  <div class="small-box bg-success">
-  <div class="inner">
-  <h3>{{ganancias__bolivares}}<sup style="font-size: 20px"></sup></h3>
-  <p>Ganancias del dia en Bs$</p>
-  </div>
-  <div class="icon">
-  <i class="ion ion-stats-bars"></i>
-  </div>
-  <a href="{% url 'LoteriaUrl:listar_jugadas_diariasUrl' %}" class="small-box-footer">Mas info <i class="fas fa-arrow-circle-right"></i></a>
-  </div>
-  </div>
-  
-  <div class="col-lg-3 col-6">
-  
-  <div class="small-box bg-warning">
-  <div class="inner">
-  <h3><i class="fas fa-file" aria-hidden="true"></i></h3>
-  <p>Reportes</p>
-  </div>
-  <div class="icon">
-  <i class="ion ion-person-add"></i>
-  </div>
 
-  <a href="{% url 'LoteriaUrl:reporteUrl' %}" class="small-box-footer">Mas info <i class="fas fa-arrow-circle-right"></i></a>
-  </div>
-  </div>
-  
-  <div class="col-lg-3 col-6">
-  
-  <div class="small-box bg-danger">
-  <div class="inner">
-  <h3>65</h3>
-  <p>Unique Visitors</p>
-  </div>
-  <div class="icon">
-  <i class="ion ion-pie-graph"></i>
-  </div>
-  <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-  </div>
-  </div>
-  
-  </div>
-
-</div>
 <br>
 <div class="container">
 
@@ -89,7 +28,7 @@
   <div class="card-header ui-sortable-handle" style="cursor: move;">
   <h3 class="card-title">
   <i class="ion ion-clipboard mr-1"></i>
-  <i class="fas fa-search"></i> Listado de loterias
+  <i class="fas fa-search"></i> Venta sin procesar
   </h3>
  
   </div>
@@ -135,7 +74,10 @@
   <div class="card-footer clearfix">
 
     <a href="{% url 'LoteriaUrl:crear_jugadasUrl' %}" class="btn btn-primary float-right"><i class="fas fa-plus"></i>Crear venta</a>
-    </div>
+    
+    
+    <a href="#" onclick="envio_peticion()" class="small-box-footer">Actualizar tasa  <i class="fas fa-arrow-circle-right"></i></a>
+</div>
   </div>
   
   
@@ -188,6 +130,43 @@
   
   }
   </script>
+
+
+
+<script type="text/javascript">
+
+function positivo_creacion() {
+
+Swal.fire({
+position: 'center',
+icon: 'success',
+title: 'Se ha registrado correctamente su venta',
+showConfirmButton: false,
+timer: 2500
+})
+
+}
+
+ function envio_peticion() {
+
+    $.ajax({
+      type: "POST",
+      url: "http://127.0.0.1:8000/prueba/crear_venta/",
+      data: {},
+      processData: false,  // tell jQuery not to process the data
+      contentType: false,
+      success: function (r) {
+        positivo_creacion()
+      }
+    });
+
+
+     
+ }
+    </script>
+
+
+
     
     {% endblock %}
 

@@ -18,10 +18,14 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path , include
 
+from LoteriaApp import views as vistas_de_logueo
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-  
+    
     path('prueba/', include(('LoteriaApp.urls' , 'LoteriaUrl'))),
+    path('' , vistas_de_logueo.login_view , name = 'login'),
+    path('logout/' , vistas_de_logueo.logout_view , name = 'logout'),
 
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

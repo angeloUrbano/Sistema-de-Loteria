@@ -14,11 +14,21 @@
                 <div class="modal-body">
                     <div class="card">
                         <ul class="list-group list-group-flush">
-                          <li class="list-group-item">Horra de la jugada: {{ object.hora_jugada }}</li>
+                          
                           <li class="list-group-item">Monto de la jugada: {{ object.monto_jugada }}</li>
                           <li class="list-group-item">Codigo de la jugada: {{ object.codigo_jugada }}</li>
                           <li class="list-group-item">fecha de la venta: {{ object.creado }}</li>
                            <li class="list-group-item">Tipo de loteria: {{ object.tipo_loteria_relacion }}</li>
+
+                           <li class="list-group-item">horas de jugada:
+
+                            {% for dato in object.hora_relacion.all %}
+                            <ul>
+                                <li>{{ dato.hora_en_nombre}}</li>
+                            </ul>
+                            
+                            {% endfor %}
+                     </li>
                            
                            <li class="list-group-item">Tipo de loteria:
 

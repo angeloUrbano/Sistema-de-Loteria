@@ -20,12 +20,13 @@
   </h3>
  
   </div>
-  
+
   <div class="card-body">
   <ul class="todo-list ui-sortable" data-widget="todo-list">
   <li>
+    <form action=""></form>
   
-    <form method="post" class="form-inline"> 
+    <form method="post" action="{% url 'LoteriaUrl:editar_jugadasUrl' object.id %}" class="form-inline" > 
         {% csrf_token %}
 
 

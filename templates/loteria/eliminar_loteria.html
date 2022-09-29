@@ -12,7 +12,7 @@
       <div class="card-header ui-sortable-handle" style="cursor: move;">
       <h3 class="card-title">
       <i class="ion ion-clipboard mr-1"></i>
-      <i class="fas fa-search"></i> Lstado de Categoria
+      <i class="fas fa-trash-alt"></i> Eliminar elemento
       </h3>
      
       </div>
@@ -32,7 +32,7 @@
             
 
                  
-                  <li> <strong>{{object}}</strong></li>
+                  <li> <strong>{{object.codigo_jugada}}</strong></li>
               
 
                
@@ -70,6 +70,19 @@
 
     <script>
 
+
+function positivo_creacion() {
+
+Swal.fire({
+position: 'center',
+icon: 'success',
+title: 'Elemento eliminado de forma correcta',
+showConfirmButton: false,
+timer: 2500
+})
+
+}
+
         function mensaje_error(data) {
           var html ='<ul>';
             $.each(data , function(key, value) {
@@ -105,8 +118,10 @@
                             dataType:'json'
                           }).done(function(data) {
                             if(!data.hasOwnProperty('error')){
-                              alert('ok')
-                            return false;
+                                positivo_creacion();
+                   
+                                setTimeout( function() { window.location.href = "http://127.0.0.1:8000/prueba/jugadas/"; }, 2800 );
+                           
                             }else{
         
                               mensaje_error(data.error);

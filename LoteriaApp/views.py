@@ -1,23 +1,84 @@
 from django.shortcuts import render , redirect
 from django.http import HttpResponse , JsonResponse
-from django.views.generic import ListView , CreateView , UpdateView , DeleteView , DetailView
+from django.views.generic import ListView , CreateView , UpdateView , DeleteView , DetailView ,TemplateView
 from django.urls import reverse_lazy
 from django.core import serializers
 import random
 from django.utils import timezone
 from decimal import Decimal
+from django.contrib.admin.models import LogEntry
+from django.contrib.auth import authenticate , login , logout
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.decorators.csrf import csrf_exempt
 
 
 
-from LoteriaApp.forms import form_loteria
-from LoteriaApp.models import Loteria , Animalito
+
+from LoteriaApp.forms import form_loteria , monto_divisas_form
+from LoteriaApp.models import Loteria , Animalito , monto_divisa , venta_procesada
+from LoteriaApp.mixins import consultas_ganancias_mixins
 
 # Create your views here.
 
 
+class procesar_venta(ListView):
+    model = Loteria
+    second_model= venta_procesada
+    template_name = 'Loteria/venta_procesada.html'
+
+
+    def get_queryset(self):
+        
+        query = self.model.objects.filter(procesado=False)
+        return query
+
+        
+
+
+    def get_context_data(self , **kwargs):
+
+        context = super().get_context_data(**kwargs)
+
+        
+        context['object_list'] = self.get_queryset()
+        return context
 
 
 
+
+    def post(self , request , *args ,**kwargs):
+        
+        pass       
+
+
+@csrf_exempt
+def crear_venta(request):
+
+    if request.method== "POST":
+
+        prueba = venta_procesada()
+        info =  Loteria.objects.filter(procesado=False)
+        valor_factura=[]
+        for x in info:
+            
+            valor_factura.append(x.id)
+            x.procesado=True
+            x.save()
+        prueba.save()    
+        prueba.relacion_model_loteria.set(valor_factura)
+
+        #return redirect('LoteriaUrl:listar_jugadasUrl')
+        dato={'ok':'ok'}
+        return JsonResponse(dato)
+
+    
+
+class reporte(TemplateView):
+    template_name = 'Loteria/reporte.html'
+
+
+    
 class eliminar_loteria(DeleteView):
     model =  Loteria
     template_name = 'loteria/eliminar_loteria.html'
@@ -49,7 +110,7 @@ class eliminar_loteria(DeleteView):
 
 
 
-class creacion_loteria(CreateView):
+class creacion_loteria( LoginRequiredMixin , CreateView):
     model =  Loteria
     form_class = form_loteria
     template_name = 'loteria/crear_loteria.html'
@@ -84,21 +145,25 @@ class creacion_loteria(CreateView):
             if form.is_valid():
                 data_guardar = self.model()
                 data2 = form.cleaned_data
-                data_guardar.hora_jugada = data2['hora_jugada']
                 data_guardar.monto_jugada = data2['monto_jugada']
                 data_guardar.tipo_loteria_relacion = data2['tipo_loteria_relacion']
                 data_guardar.codigo_jugada = self.get_queryset()
                 data_guardar.save()
-                valor =[]
+                valor_animalito =[]
+                valor_hora=[]
+            
+                for x in data2['hora_relacion']:
+                    valor_hora.append(x)
+                data_guardar.hora_relacion.set(valor_hora)
 
                 for x in data2['relacion_animalito']:
-                    valor.append(x)
-                data_guardar.relacion_animalito.set(valor)
+                    valor_animalito.append(x)
+                data_guardar.relacion_animalito.set(valor_animalito)
                 
             else:
                 data['error'] = form.errors
 
-        except Exception as e:
+        except Exception as e: 
            
             data['error'] = str(e) 
 
@@ -117,10 +182,20 @@ class editar_loteria(UpdateView):
 
 
 
+
+class editar_valor_divisa(CreateView):
+    model =  monto_divisa
+    form_class = monto_divisas_form
+    template_name = 'loteria/modal_editar_divisaoteria.html'
+    success_url = reverse_lazy('LoteriaUrl:listar_jugadasUrl')
+
+
+
+
 def probando(request):
 
-    data={'informacion': 'campos que mando como informacion'}
-    return render(request, 'loteria/modal_detalle_venta.html' ,  {'data':data})
+    data= LogEntry.objects.all()
+    return render(request, 'login.html' )
 
 
 class detalle_venta(DetailView):
@@ -129,39 +204,81 @@ class detalle_venta(DetailView):
     pk_url_kwargs= 'pk'	
     
 
-class listar_jugadas(ListView):
+class listar_jugadas(LoginRequiredMixin , ListView , consultas_ganancias_mixins):
     model =  Loteria
     template_name= 'loteria/listar_loteria.html'
 
-
-    def generar_ganancias_bolivares(self):
-
-        now = timezone.now()
-        fecha_busqueda = self.model.objects.filter(creado=now)
-        suma =0
-        for x in fecha_busqueda:
-            suma += x.monto_jugada
-        return suma
-
-    def generar_ganancias_dolares(self):
-
-        now = timezone.now()
-        fecha_busqueda = self.model.objects.filter(creado=now)
-        suma =0
-        for x in fecha_busqueda:
-            suma += x.monto_jugada
-        resultado_dolares =Decimal(suma) // Decimal(8.22) 
-        dato_redondiado = round(resultado_dolares, 3)
-        
-        
-        return resultado_dolares  
+    consulta= consultas_ganancias_mixins()
 
     def get_context_data(self, **kwargs):
 
         context = super().get_context_data (**kwargs)
         #ganancias del dia en bolivares
-        context['ganancias__bolivares']= self.generar_ganancias_bolivares()
+     
+        context['ganancias__bolivares']= self.consulta.generar_ganancias_bolivares()
         #ganancias del dia en dolares
-        context['ganancias__dolares']= self. generar_ganancias_dolares
+        context['ganancias__dolares']= self.consulta.generar_ganancias_dolares()
         return context
+
+
+
+class lista_resumida_vendas_del_dia(ListView , consultas_ganancias_mixins):
+
+    model = Loteria
+    template_name = 'loteria/listar_loteria_ventas_diaria.html'
+    consulta= consultas_ganancias_mixins()
+
+    def get_queryset(self):
+
+        now = timezone.now()
+        queryset = self.model.objects.filter(creado=now)
+        return queryset
+       
+
+    def get_context_data(self , **kwargs):
+
+        context = super().get_context_data(**kwargs)
+        context['object_list']= self.get_queryset() 
+        #ganancias del dia en bolivares
+        context['ganancias__bolivares']= self.consulta.generar_ganancias_bolivares()
+        #ganancias del dia en dolares
+        context['ganancias__dolares']= self.consulta.generar_ganancias_dolares() 
+
+      
+        return context
+
+
+
+
+
+
+def login_view(request):
+	
+	
+	if request.method== 'POST':
+		
+		
+		username = request.POST['email']
+		password = request.POST['password']
+	
+		User = authenticate( username=username, password = password)
+		
+		
+		if User :
+			
+			login(request , User)
+		   
+			
+			return redirect('LoteriaUrl:listar_jugadasUrl')
+		else:
+			return render(request ,  "login.html" , {'error': 'Correo o Contraseña Invalido'})	
+	return render(request , "login.html")
+
+
+
+@login_required
+def logout_view(request):
+	logout(request)
+	return redirect('login') 
+      
 
