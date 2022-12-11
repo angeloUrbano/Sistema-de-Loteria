@@ -27,7 +27,7 @@
     
      
   
-<form  action="#" id="form_nombre">
+<form  action="{% url 'LoteriaUrl:ReportePersonaUrl2' %}" id="form_nombre">
 
 
 
@@ -36,45 +36,33 @@
 
 
 <div class="custom-control custom-checkbox">
-	<input type="checkbox" name="customCheck1" id="customCheck1" onclick="prueba() ; ActivarCasilla(); " >
-	<label  for="customCheck1">Primer cuatrimestre del año </label>
-</div>
-
-<br>
-<div class="custom-control custom-checkbox">
-	<input type="checkbox" name="customCheck2" id="customCheck2" onclick="prueba() ; ActivarCasilla();" >
-	<label  for="customCheck2">Segundo cuatrimestre del año </label>
-</div>
-<br>
-
-<div class="custom-control custom-checkbox">
-	<input type="checkbox" name="customCheck3"  id="customCheck3" onclick="prueba() ; ActivarCasilla();" >
-	<label for="customCheck3">Tercero cuatrimestre del año </label>
-</div>
-
-
-
-<br>
-
-<div class="custom-control custom-checkbox">
-	<input type="checkbox" name="customCheck4"  id="customCheck4" onclick="prueba() ; ActivarCasilla();" >
-	<label  for="customCheck4">Todas las actividades del año</label>
-</div>
-
-<br>
-
-
-<label for="">seleccionar el año del reporte</label>
-<select class="custom-select"  name="prueba2" id ="mySelect" >
+	<label  for="customCheck1">Desde: </label>
+	<input type="date" class="form-control" name="customCheck1" id="customCheck1"  >
 	
+</div>
 
-</select>
+<br>
+
+
+
+<br>
+
+<div class="custom-control custom-checkbox">
+	<label  for="customCheck4">Hasta</label>
+	<input type="date" name="customCheck4" class="form-control"  id="customCheck4"  >
+	
+</div>
+
+<br>
+
+
+
 
 
 
 
     
-  <button   style="border-radius: 15px; text-align: center; font-family: cursive" class="btn btn-success btn-block mt-5" type="submit">Crear reporte</button>
+  <button  onclick="ActivarCasilla()"  style="border-radius: 15px; text-align: center; font-family: cursive" class="btn btn-success btn-block mt-5" type="submit">Crear reporte</button>
 
   
 </form> 
@@ -103,16 +91,15 @@
 
 	
 
-function prueba () {
+// function prueba () {
 
-	for (let i = 2020; i <= 2055; i++) {
-		$('#mySelect').append($('<option>', {
-		value: i,
-		text: i
+
+// 	if ($("#customCheck1").val=="") {
+// 		alert
+		
+// 	}
 	
-}))};
-	
-}
+// }
 
 
 
@@ -120,89 +107,49 @@ function prueba () {
 function ActivarCasilla() 
 {
 
-	$("#customCheck1").on('change' , function (ev) {
-		ev.preventDefault();
-		$("#customCheck1").prop("checked" , true);
-		$("#customCheck2").prop("checked" , false);
-		$("#customCheck3").prop("checked" , false);
-		$("#customCheck4").prop("checked" , false);
+	
+
+
+
+	var form = document.getElementById("form_nombre");
+
+	form.addEventListener("submit" , function(event) {
+		var lista=[]
 		
+		var dato1 = $("#customCheck1").val()
+		var dato2 = $("#customCheck4").val()
+
+
+
+
+		lista.push(dato1)
+		lista.push(dato1)
+		
+
+
+		
+
+		if (dato1 == "" || dato2 == ""  ) {
+			event.preventDefault();
+		alert("Debe seleccionar el rango de fechas del reporte");	
+		}
+	
+	
 	})
 
 
-
-
-	$("#customCheck2").on('change' , function (ev) {
-		ev.preventDefault();
-		$("#customCheck2").prop("checked" , true);
-		$("#customCheck1").prop("checked" , false);
-		$("#customCheck3").prop("checked" , false);
-		$("#customCheck4").prop("checked" , false);
-	})
+	
 
 
 
-	$("#customCheck3").on('change' , function (ev) {
-		ev.preventDefault();
-		$("#customCheck3").prop("checked" , true);
-		$("#customCheck1").prop("checked" , false);
-		$("#customCheck2").prop("checked" , false);
-		$("#customCheck4").prop("checked" , false);
-	})
-
-
-
-	$("#customCheck4").on('change' , function (ev) {
-		ev.preventDefault();
-		$("#customCheck4").prop("checked" , true);
-		$("#customCheck1").prop("checked" , false);
-		$("#customCheck2").prop("checked" , false);
-		$("#customCheck3").prop("checked" , false);
-	})
-
+	
 
 
 
 }
 
 
-var form = document.getElementById("form_nombre");
 
-form.addEventListener("submit" , function(event) {
-	var lista=[]
-	
-	var dato1 = document.forms["form_nombre"]["customCheck1"].checked 
-	var dato2 = document.forms["form_nombre"]["customCheck2"].checked 
-	var dato3 = document.forms["form_nombre"]["customCheck3"].checked 
-	var dato4 = document.forms["form_nombre"]["customCheck4"].checked 
-
-
-	lista.push(dato1)
-	lista.push(dato2)
-	lista.push(dato3)
-	lista.push(dato4)
-	
-
-
-
-	var condicion_envio = false ;
-	for (let index = 0; index < lista.length; index++) {
-
-		if (lista[index]== true) {
-			
-			condicion_envio = true;
-		}
-		
-		
-	}
-
-	if (condicion_envio == false) {
-		event.preventDefault();
-	alert("Debe seleccionar el rango de fechas del reporte");	
-	}
-	
-	
-})
 
 
 

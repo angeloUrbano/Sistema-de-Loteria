@@ -1,3 +1,12 @@
+
+
+
+
+
+
+
+
+
 {% extends 'base/index2.html' %}
 
 
@@ -6,6 +15,33 @@
 
 
 {% block content %}
+<div class="container">
+  {% if form.errors %}
+  <div class="alert alert-danger" role="alert">
+    <strong>Error!!!</strong> Ha ocurrido un error al intentar guardar el registro , confirme que la informacion registrada sea correcta
+  
+  
+    <ul>
+{% for field in form %}
+
+    {% for error in field.errors %}
+
+     
+      <li> <strong>{{error.name}}</strong></li>
+
+
+      <script>
+        alert
+      </script>
+  
+
+    {% endfor %}
+
+  {% endfor %}
+  </ul>
+</div>
+{% endif %}
+</div>
 
 
 <br>
@@ -16,48 +52,28 @@
   <div class="card-header ui-sortable-handle" style="cursor: move;">
   <h3 class="card-title">
   <i class="ion ion-clipboard mr-1"></i>
-  <i class="fas fa-edit"> </i> Editar venta
+  <i class="fas fa-plus"></i>  Crear Loteria 
   </h3>
  
   </div>
-
+  
   <div class="card-body">
   <ul class="todo-list ui-sortable" data-widget="todo-list">
   <li>
-    <form action=""></form>
   
-    <form method="post" action="{% url 'LoteriaUrl:editar_jugadasUrl' object.id %}" class="form-inline" > 
+    <form method="post"  class="form-inline" > 
         {% csrf_token %}
 
 
-        {% if form.errors %}
-              <div class="alert alert-danger" role="alert">
-                <strong>Error!!!</strong> Ha ocurrido un error al intentar guardar el registro
-              
-              
-                <ul>
-            {% for field in form %}
-
-                {% for error in field.errors %}
-
-                 
-                  <li> <strong>{{error}}</strong></li>
-              
-
-                {% endfor %}
-
-              {% endfor %}
-              </ul>
-            </div>
-        {% endif %}
+       
 
 
 
 
 
         <div class="form-group">
-          <label for="" style="margin-right: 15px;">{{form.hora_jugada.label}}</label>
-            {{ form.hora_jugada}}
+          <label for="" style="margin-right: 15px;">{{form.hora_relacion.label}}</label>
+            {{ form.hora_relacion}}
         </div>
         <div class="form-group" style="margin-left: 18px;">
           <label for="" style="margin-right: 15px;">{{form.monto_jugada.label}}</label>
@@ -97,7 +113,7 @@
   <div class="card-header ui-sortable-handle" style="cursor: move;">
   <h3 class="card-title">
   <i class="ion ion-clipboard mr-1"></i>
-  <i class="fas fa-edit"> </i>  Editar animalito
+  <i class="fas fa-plus"></i>   Seleccionar animalito
   </h3>
  
   </div>
@@ -123,9 +139,7 @@
   
   </ul>
   <div class="card-footer clearfix">
-    <button type="submit" class="btn btn-primary float-right"><i class="fas fa-edit"> </i> Editar Venta</button>
-    <a style="margin-right: 10px;" class="btn btn-danger float-right"  href="{% url 'LoteriaUrl:listar_jugadasUrl' %}">Cancelar</a>
-     
+    <button type="submit" class="btn btn-primary float-right"><i class="fas fa-plus"></i> Add Loteria</button>
     </div>
   </div>
 </form>
@@ -136,4 +150,5 @@
   
   </div>
 </div>
+
 {% endblock %}

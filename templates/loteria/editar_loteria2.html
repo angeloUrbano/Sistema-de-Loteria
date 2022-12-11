@@ -1,0 +1,154 @@
+
+
+
+
+
+
+
+
+
+{% extends 'base/index2.html' %}
+
+
+
+
+
+
+{% block content %}
+<div class="container">
+  {% if form.errors %}
+  <div class="alert alert-danger" role="alert">
+    <strong>Error!!!</strong> Ha ocurrido un error al intentar guardar el registro , confirme que la informacion registrada sea correcta
+  
+  
+    <ul>
+{% for field in form %}
+
+    {% for error in field.errors %}
+
+     
+      <li> <strong>{{error.name}}</strong></li>
+
+
+      <script>
+        alert
+      </script>
+  
+
+    {% endfor %}
+
+  {% endfor %}
+  </ul>
+</div>
+{% endif %}
+</div>
+
+
+<br>
+<div class="container">
+
+
+<div class="card">
+  <div class="card-header ui-sortable-handle" style="cursor: move;">
+  <h3 class="card-title">
+  <i class="ion ion-clipboard mr-1"></i>
+  <i class="fas fa-plus"></i>  Crear Loteria 
+  </h3>
+ 
+  </div>
+  
+  <div class="card-body">
+  <ul class="todo-list ui-sortable" data-widget="todo-list">
+  <li>
+  
+    <form method="post"  class="form-inline" > 
+        {% csrf_token %}
+
+
+       
+
+
+
+        {{object2}}
+
+        <div class="form-group">
+          <label for="" style="margin-right: 15px;">{{form.hora_relacion.label}}</label>
+            {{ form.hora_relacion}}
+        </div>
+        <div class="form-group" style="margin-left: 18px;">
+          <label for="" style="margin-right: 15px;">{{form.monto_jugada.label}}</label>
+          {{ form.monto_jugada}}
+         
+      </div>
+      <label for="" style="margin-right: 15px; margin-left: 18px;">{{form.tipo_loteria_relacion.label}}</label>
+      {{form.tipo_loteria_relacion}}
+      
+      
+
+        
+       
+      
+  </li>
+  
+ 
+  
+  </ul>
+
+
+
+
+
+
+  
+  </div>
+</div>
+</div>
+
+
+<br>
+<div class="container">
+
+
+<div class="card">
+  <div class="card-header ui-sortable-handle" style="cursor: move;">
+  <h3 class="card-title">
+  <i class="ion ion-clipboard mr-1"></i>
+  <i class="fas fa-plus"></i>   Seleccionar animalito
+  </h3>
+ 
+  </div>
+  
+  <div class="card-body">
+  <ul class="todo-list ui-sortable" data-widget="todo-list">
+  <li>
+  
+ 
+    <div class="form-check form-check-inline">
+      {{ form.relacion_animalito }}
+      <label class="form-check-label" for="inlineCheckbox2"></label>
+    </div>
+
+
+       
+        
+       
+      
+  </li>
+  
+ 
+  
+  </ul>
+  <div class="card-footer clearfix">
+    <button type="submit" class="btn btn-primary float-right"><i class="fas fa-plus"></i> Add Loteria</button>
+    </div>
+  </div>
+</form>
+
+
+
+
+  
+  </div>
+</div>
+
+{% endblock %}

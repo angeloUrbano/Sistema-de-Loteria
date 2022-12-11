@@ -68,13 +68,13 @@
   
   <div class="small-box bg-danger">
   <div class="inner">
-  <h3>65</h3>
-  <p>Unique Visitors</p>
+    <h3><i class='fas fa-cart-plus'></i></h3>
+  <p>Venta activa</p>
   </div>
   <div class="icon">
   <i class="ion ion-pie-graph"></i>
   </div>
-  <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+  <a href="{% url 'LoteriaUrl:procesarUrl' %}" class="small-box-footer">mas info <i class="fas fa-arrow-circle-right"></i></a>
   </div>
   </div>
   
@@ -102,27 +102,29 @@
       <thead class="thead-dark">
         <tr>
           <th>codigo</th>
-          <th>hora</th>
-          <th>monto</th>
           <th>fecha</th>
+          <th>monto</th>
           <th>accion</th>
         </tr>
       </thead>
       <tbody>
         {% for dato in object_list %}
+        
 
           <tr>
             <td> {{dato.codigo_jugada}} </td>
-            <td>{{dato.hora_jugada}}</td>
-            <td>{{dato.monto_jugada}}</td>
             <td>{{dato.creado}}</td>
+            <td>{{dato.monto_final_jugadas}}</td>
             <td>
+            
+           
               
-              <a type="button"  class="btn btn-info"href="{% url 'LoteriaUrl:editar_jugadasUrl' dato.id %}"><i class="fas fa-edit"></i></a>
+              <a type="button"  class="btn btn-warning"href="{% url 'LoteriaUrl:reimprimirUrl' dato.id %}"><i class="fas fa-print"></i> </a>
               <a type="button"  class="btn btn-danger"href="{% url 'LoteriaUrl:eliminar_jugadasUrl' dato.id %}"><i class="fas fa-trash-alt"></i></a>
               <button class="btn btn-success" onclick="detalle_venta('{% url 'LoteriaUrl:detalle_jugadasUrl' dato.id  %}')"><i class="fas fa-search"></i></button>
             </td>
           </tr>
+          
 
         {% endfor %}
       </tbody>

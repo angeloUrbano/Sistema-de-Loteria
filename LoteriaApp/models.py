@@ -16,7 +16,7 @@ class Animalito(models.Model):
 class tipo_de_loteria_jugada(models.Model):
 
     nombre_tipo_loteria = models.CharField(max_length=150, null=False , blank=False)
-    codigo_tipo_loteria= models.CharField(max_length=250 , null=False, blank= False )
+    codigo_tipo_loteria= models.CharField(max_length=250 , null=False, blank= False , unique=True )
     def __str__(self):
         return self.nombre_tipo_loteria
 
@@ -32,19 +32,23 @@ class hora_jugada_model(models.Model):
 class Loteria(models.Model):
 
     monto_jugada = models.DecimalField(max_digits=12 , decimal_places=2 , null=False, blank= False)
-    codigo_jugada = models.CharField(max_length=250 , null=False, blank= False )
     creado = models.DateField(auto_now_add=True)
     procesado = models.BooleanField(default=False)
     relacion_animalito = models.ManyToManyField(Animalito)
-    tipo_loteria_relacion = models.ForeignKey(tipo_de_loteria_jugada,  blank=False, null=False, on_delete=models.CASCADE)
+    tipo_loteria_relacion =  models.ManyToManyField(tipo_de_loteria_jugada )
     hora_relacion = models.ManyToManyField(hora_jugada_model)
+   
 
 
 
 class venta_procesada(models.Model):
 
     relacion_model_loteria = models.ManyToManyField(Loteria)
+    codigo_jugada = models.CharField(max_length=250 , null=False, blank= False )
+    creado = models.DateField(auto_now_add=True)
+    monto_final_jugadas= models.DecimalField(max_digits=12 , decimal_places=2 , null=False, blank= False)
     pago_realizado = models.BooleanField(default=True) 
+    hora = models.CharField(max_length=250 , null=False, blank= False )
 
 
 
@@ -54,5 +58,9 @@ class monto_divisa(models.Model):
 
     def __str__(self):
         return str(self.monto_en_dolares)
+
+
+
+
 
 

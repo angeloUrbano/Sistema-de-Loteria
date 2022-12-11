@@ -1,7 +1,7 @@
 from django.forms import ModelForm
 from django.forms import widgets
 from django import forms
-from LoteriaApp.models import Animalito , Loteria ,  monto_divisa
+from LoteriaApp.models import Animalito , Loteria ,  monto_divisa , venta_procesada
 
 
 
@@ -41,12 +41,18 @@ class form_loteria(ModelForm):
             'relacion_animalito':  forms.CheckboxSelectMultiple(attrs={"class":"form-inline row form-check-input", 'style':'margin-left: 25px;'}),
 
 
-            'tipo_loteria_relacion': forms.Select(attrs={"class":"custom-select col-sm-3"})
+            'tipo_loteria_relacion': forms.SelectMultiple(attrs={"class":"custom-select col-sm-3"})
         }
 
 
 
 
+
+
+class venta_procesadaform(ModelForm):
+    class Meta:
+        model = venta_procesada
+        fields =['relacion_model_loteria' , 'codigo_jugada'   , 'monto_final_jugadas' , 'pago_realizado' , 'hora']
 
 
 class monto_divisas_form(ModelForm):

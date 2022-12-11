@@ -4,42 +4,60 @@
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content" >
                 <div class="modal-header">
-                    <h2 class="modal-title">Detalle Venta</h2>
+                    <h2 class="modal-title">Detalle Venta holaaaa</h2>
+                    
+                    
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
 
                     </button>
                 </div>
-
+                <h3> <li >Codigo de la jugada: {{object.codigo_jugada }}</li></h3>
                 <div class="modal-body">
                     <div class="card">
                         <ul class="list-group list-group-flush">
+                            {% for dato in object.relacion_model_loteria.all %}
+                          <li class="list-group-item">Monto de la jugada: {{ dato.monto_jugada }}</li>
                           
-                          <li class="list-group-item">Monto de la jugada: {{ object.monto_jugada }}</li>
-                          <li class="list-group-item">Codigo de la jugada: {{ object.codigo_jugada }}</li>
-                          <li class="list-group-item">fecha de la venta: {{ object.creado }}</li>
-                           <li class="list-group-item">Tipo de loteria: {{ object.tipo_loteria_relacion }}</li>
+                          <li class="list-group-item">fecha de la venta: {{ dato.creado }}</li>
+                          <li class="list-group-item">Tipo de loteria: 
 
-                           <li class="list-group-item">horas de jugada:
-
-                            {% for dato in object.hora_relacion.all %}
+                            {% for dato in object.tipo_loteria_relacion.all %}
                             <ul>
-                                <li>{{ dato.hora_en_nombre}}</li>
+                                <li>{{ dato.nombre_tipo_loteria}}</li>
+                            </ul>
+                            
+                            {% endfor %}
+
+
+                           </li>
+                          
+                            <li class="list-group-item">horas de jugada:
+
+                            {% for dato1 in dato.hora_relacion.all %}
+                            <ul>
+                                <li>{{ dato1.hora_en_nombre}}</li>
                             </ul>
                             
                             {% endfor %}
                      </li>
                            
-                           <li class="list-group-item">Tipo de loteria:
+                           <li class="list-group-item">Animalitos:
 
-                                    {% for dato in object.relacion_animalito.all %}
+                                    {% for dato1 in dato.relacion_animalito.all %}
                                     <ul>
-                                        <li>{{ dato.nombre_animalito}}</li>
+                                        <li>{{ dato1.nombre_animalito}}</li>
                                     </ul>
                                     
                                     {% endfor %}
-                             </li>
+                             </li> 
                         </ul>
+                        <br>
+                        <h1>{{object.id}}</h1>
+                        <a type="button"  class="btn btn-info"href="{% url 'LoteriaUrl:editar_loteria2Url'  dato.id  object.id %}"><i class="fas fa-edit"></i></a>
+                        ------------------------------------------
+                        <br>
+                        {% endfor %}
                       </div>
                 </div>
 

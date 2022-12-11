@@ -40,9 +40,9 @@
     <table class="table" id="example" >
       <thead class="thead-dark">
         <tr>
-          <th>codigo</th>
-          <th>hora</th>
-          <th>monto</th>
+          <th>Monto</th>
+          <th>Pagado</th>
+       
           <th>fecha</th>
           <th>accion</th>
         </tr>
@@ -51,15 +51,15 @@
         {% for dato in object_list %}
 
           <tr>
-            <td> {{dato.codigo_jugada}} </td>
-            <td>{{dato.hora_jugada}}</td>
-            <td>{{dato.monto_jugada}}</td>
+            <td> {{dato.monto_jugada}} </td>
+            <td>{{dato.procesado}}</td>
+          
             <td>{{dato.creado}}</td>
             <td>
               
               <a type="button"  class="btn btn-info"href="{% url 'LoteriaUrl:editar_jugadasUrl' dato.id %}"><i class="fas fa-edit"></i></a>
-              <a type="button"  class="btn btn-danger"href="{% url 'LoteriaUrl:eliminar_jugadasUrl' dato.id %}"><i class="fas fa-trash-alt"></i></a>
-              <button class="btn btn-success" onclick="detalle_venta('{% url 'LoteriaUrl:detalle_jugadasUrl' dato.id  %}')"><i class="fas fa-search"></i></button>
+              <a type="button"  class="btn btn-danger"href="{% url 'LoteriaUrl:eliminar_juga2dasUrl' dato.id %}"><i class="fas fa-trash-alt"></i></a>
+              <button class="btn btn-success" onclick="detalle_venta('{% url 'LoteriaUrl:detalle_jugadas2Url' dato.id  %}')"><i class="fas fa-search"></i></button>
             </td>
           </tr>
 
@@ -75,13 +75,16 @@
 
     <a href="{% url 'LoteriaUrl:crear_jugadasUrl' %}" class="btn btn-primary float-right"><i class="fas fa-plus"></i>Crear venta</a>
     
-    
-    <a href="#" onclick="envio_peticion()" class="small-box-footer">Actualizar tasa  <i class="fas fa-arrow-circle-right"></i></a>
+    <a style="margin-right: 10px;" class="btn btn-danger float-right"  href="" onclick="aliminar_ventas()"> <i class="fas fa-trash-alt"></i> Eliminar </a>
+    <a class="btn btn-success" style="margin-right: 10px;" href="#" onclick="envio_peticion()" >Realizar venta <i class="fas fa-arrow-circle-right"></i></a>
+    <br>
+    <h5>Total factura:{{prueba}}</h5>
+  </div>
+  </div>
+  
+  
+  </div>
 </div>
-  </div>
-  
-  
-  </div>
 </div>
 
 <div class="modal fade" id="detalle_venta_modal" role="dialog"></div>
@@ -147,6 +150,19 @@ timer: 2500
 
 }
 
+
+function positivo_eliminar() {
+
+Swal.fire({
+position: 'center',
+icon: 'success',
+title: 'Se ha eliminado correctamente su venta',
+showConfirmButton: false,
+timer: 2500
+})
+
+}
+
  function envio_peticion() {
 
     $.ajax({
@@ -157,11 +173,34 @@ timer: 2500
       contentType: false,
       success: function (r) {
         positivo_creacion()
+        setTimeout( function() { window.location.href = "http://127.0.0.1:8000/prueba/jugadas/"; }, 2800 );
+      },
+      error:function(r){
+        alert("error")
       }
     });
 
 
      
+ }
+
+
+ function  aliminar_ventas(){
+
+  $.ajax({
+      type: "POST",
+      url: '{% url 'LoteriaUrl:eliminar_venta_multipleUrl' %}',
+      data: {},
+      processData: false,  // tell jQuery not to process the data
+      contentType: false,
+      success: function (r) {
+        positivo_eliminar();
+        window.location.href = "http://127.0.0.1:8000/prueba/jugadas/"; 
+        // setTimeout( function() { window.location.href = "http://127.0.0.1:8000/prueba/jugadas/"; }, 2800 );
+        
+      }
+    });
+   
  }
     </script>
 
